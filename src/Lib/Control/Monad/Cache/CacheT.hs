@@ -1,1 +1,0 @@
-module Control.Monad.Cache where

@@ -16,9 +16,9 @@ source-repository       head
     location:           https://github.com/nathaniel-may/rolling-cache/
 
 library
-    exposed-modules:    Cache
-                      , CacheT
-                      , MonadCache
+    exposed-modules:    Data.Cache
+                      , Control.Monad.Cache.CacheT
+                      , Control.Monad.Cache.Class.MonadCache
     build-depends:      base ^>=4.16.4.0
-    hs-source-dirs:     app
+    hs-source-dirs:     src
     default-language:   Haskell2010

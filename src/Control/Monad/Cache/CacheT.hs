@@ -13,22 +13,13 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.Trans.Class (MonadTrans)
 
 
+-- | monad transformer for storing key-value pairs into a fixed-size, automatically evicted cache.
 newtype CacheT k v m a = CacheT (StateT (Cache k v) m a)
+
+deriving instance (Functor m, Hashable k) => Functor (CacheT k v m)
+deriving instance (Hashable k, Monad m) => Applicative (CacheT k v m) 
+deriving instance (Hashable k, Monad m) => Monad (CacheT k v m)
 deriving instance Hashable k => MonadTrans (CacheT k v)
-
-instance (Applicative m, Hashable k) => Functor (CacheT k v m) where
-    fmap f (CacheT x) = CacheT (fmap f x)
-
-instance (Hashable k, Monad m) => Applicative (CacheT k v m) where
-    pure x = CacheT $ StateT (\s -> pure (x, s))
-    (CacheT (StateT mf)) <*> (CacheT (StateT mx)) = CacheT . StateT $ \ s -> do
-        (f, s') <- mf s
-        (x, s'') <- mx s'
-        pure (f x, s'')
-
-instance (Hashable k, Monad m) => Monad (CacheT k v m) where
-    (CacheT (StateT x)) >>= f = CacheT . StateT $ \s ->
-        x s >>= \(v, s') -> case f v of CacheT (StateT st) -> st s'
 
 instance (Hashable k, Monad m) => MonadCache (CacheT k v m) where
     type instance Key (CacheT k v m) = k

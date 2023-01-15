@@ -31,7 +31,7 @@ insert k v (Cache max ks m) =
 
 -- | gets an element from the Cache if it does not exist or update its position to
 -- | the most recently touched. Process the effects of the last element if the maximum size is exceeded
-lookup :: Hashable k => k -> Cache k v -> ((Maybe v), (Cache k v))
+lookup :: Hashable k => k -> Cache k v -> (Maybe v, Cache k v)
 lookup k (Cache max ks m) =
     let v = M.lookup k m
         ks' = if isJust v then touch k ks else ks

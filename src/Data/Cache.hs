@@ -37,6 +37,10 @@ lookup k (Cache max ks m) =
         ks' = if isJust v then touch k ks else ks
     in (v, shrink $ Cache max ks' m)
 
+-- | checks if the key is in the cache without updating the most recently touched element
+elem :: Hashable k => k -> Cache k v -> Bool
+elem k (Cache max ks m) = M.member k m
+
 -- | immediately removes the element from the cache
 evict :: Hashable k => k -> Cache k v -> Cache k v
 evict k (Cache max ks m) = Cache max (V.filter (/= k) ks) (M.delete k m)

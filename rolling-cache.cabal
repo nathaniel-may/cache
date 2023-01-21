@@ -38,3 +38,13 @@ test-suite test
                       , QuickCheck ==2.14.*
                       , quickcheck-instances ==0.3.*
     default-language:   Haskell2010
+
+executable example
+    hs-source-dirs:     example
+    main-is:            Main.hs
+    build-depends:      base ^>=4.16.4.0
+                      , hashable ==1.4.1.*
+                      , mtl ==2.3.*
+                      , rolling-cache
+                      , transformers ==0.6.*
+    default-language:   Haskell2010

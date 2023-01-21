@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Control.Monad.Cache.Class.MonadCache where
     
@@ -37,7 +38,7 @@ evictAll = cache (\c -> ((), Cache.evictAll c))
 -- | gets the value using the cache if possible,
 -- | otherwise it runs the effect and puts it in the cache
 fetch :: MonadCache m => (Key m -> m (Value m)) -> Key m -> m (Value m)
-fetch f k = lookup k >>= (\x -> case x of
+fetch f k = lookup k >>= (\case
     Nothing -> f k >>= \v -> insert k v $> v
     Just v -> pure v)
 
